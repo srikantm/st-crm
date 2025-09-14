@@ -302,6 +302,27 @@ const AddPackageForm = ({ handleChange, values, departureCityDateData, updateCit
           })}
         </div>
 
+        <div className="flex flex-wrap border border-gray-200 rounded-md bg-gray-50">
+
+          <div className="p-3 mb-5 basis-1/2">
+            <label htmlFor="packageImage" className={`${font.className} mb-2 block text-sm font-medium`}>
+              Upload Package Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
+              name="packageImage"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  handleChange({ target: { name: 'packageImage', value: file } });
+                }
+              }}
+            />
+          </div>
+        </div>
+
         <div>
 
         </div>

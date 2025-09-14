@@ -1,7 +1,9 @@
-import { ArrowDownTrayIcon, BanknotesIcon, DocumentPlusIcon, EyeDropperIcon, EyeIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import { deleteInvoice } from '@/app/lib/actions';
+"use client";
 
+import { ArrowDownTrayIcon, BanknotesIcon, DocumentPlusIcon, EyeDropperIcon, EyeIcon, PencilIcon, PlusIcon, TrashIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { deleteInvoice, deactivateProduct } from '@/app/lib/actions';
+import { useRouter } from 'next/navigation';
 
 
 export function CreateProduct() {
@@ -34,5 +36,26 @@ export function UpdateProduct({ id }: { id: string }) {
     >
       <PencilIcon className="w-4 h-4" />
     </Link>
+  );
+}
+
+export function DeactivateProduct({ id }: { id: string }) {
+  const router = useRouter();
+  
+  const handleDeactivate = async () => {
+    const confirmed = window.confirm("Are you sure you want to deactivate this package?");
+    if (confirmed) {
+      await deactivateProduct(id);
+      router.refresh();
+    }
+  };
+  
+  return (
+    <button
+      onClick={handleDeactivate}
+      className="rounded-md border p-2 hover:bg-gray-100 text-red-600"
+    >
+      <NoSymbolIcon className="w-4 h-4" />
+    </button>
   );
 }

@@ -1,6 +1,7 @@
-import { UpdateProduct, ViewProduct } from '@/app/ui/products/buttons';
+import { DeactivateProduct, UpdateProduct, ViewProduct } from '@/app/ui/products/buttons';
 import { fetchFilteredProducts } from '@/app/lib/data';
 import { font } from '../fonts';
+import PackageStatus from './status';
 
 export default async function ProductsTable({
   query,
@@ -62,8 +63,11 @@ export default async function ProductsTable({
                 <th scope="col" className="px-3 py-2 font-sm">
                   Amount
                 </th>
+                <th scope="col" className="px-3 py-2 font-sm">
+                  Status
+                </th>
                 <th scope="col" className="relative px-3 py-2">
-                  <span className="sr-only">Edit</span>
+                  <span className="sr-only">Actions</span>
       
                 </th>
               </tr>
@@ -89,10 +93,14 @@ export default async function ProductsTable({
                   <td className="whitespace-nowrap text-sm px-3 py-2">
                     {Number(product.adult_rate!).toLocaleString("en-US", { style: "currency", currency: "INR" })}
                   </td>
+                  <td className="whitespace-nowrap px-3 py-2">
+                    <PackageStatus status={product.status || 'ACTIVE'} />
+                  </td>
                   <td className="whitespace-nowrap py-2 pl-3 pr-3">
                     <div className="flex justify-center gap-3">
                       <ViewProduct id={product.package_id}/>
                       <UpdateProduct id={product.package_id} />
+                      <DeactivateProduct id={product.package_id} />
                     </div>
                   </td>
                 </tr>
