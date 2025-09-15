@@ -537,3 +537,41 @@ export async function updateProduct(formData: { packages?: { packageName: string
   revalidatePath('/dashboard/products');
   redirect('/dashboard/products');
 }
+
+export async function deactivateProduct(packageId: string) {
+  try {
+    const domain = process.env.NEXT_PUBLIC_API_URL;
+    const url = `${domain}/v1/package/status`;
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        packageId: packageId,
+        status: 'INACTIVE'
+      })
+    };
+
+    await fetch(url, requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Package deactivated successfully:', data);
+      })
+      .catch(error => {
+        console.error('Error deactivating package:', error);
+      });
+
+    revalidatePath('/dashboard/products');
+    return { success: true };
+  } catch (error) {
+    console.error('Error in deactivateProduct function:', error);
+    return { success: false, error: 'Failed to deactivate package' };
+  }
+}

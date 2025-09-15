@@ -118,6 +118,7 @@ export type CrmProductsTable = {
   package_type: string;
   theme_type: string;
   adult_rate: number;
+  status?: string;
 };
 
 export type DashboardCountData = {
