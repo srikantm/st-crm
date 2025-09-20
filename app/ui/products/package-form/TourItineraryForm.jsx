@@ -245,7 +245,7 @@ const TourItineraryForm = ({ handleChange, itineraryDetails, itineraries, update
                                     <MenuItem value={15}>15</MenuItem>
                                     <MenuItem value={16}>16</MenuItem>
                                 </Select>
-                                {itineraryDetails.durationDays === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>DurationDays is Mandatory</label>}
+                                {itineraryDetails.durationDays === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Duration Days is Mandatory</label>}
                             </div>
                         </div>
 

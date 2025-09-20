@@ -40,6 +40,7 @@ const TourDetailsForm = ({ handleChange, flightDetails, accomodationDetailsData,
                                 value={flightDetails.source}
                                 onChange={(e) => handleChange(e, 0, "flightSource")}
                             />
+                            {flightDetails.source === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Source is Mandatory</label>}
                         </div>
                         <div className="p-5 mb-5 basis-1/3">
 
@@ -55,6 +56,7 @@ const TourDetailsForm = ({ handleChange, flightDetails, accomodationDetailsData,
                                 value={flightDetails.destination}
                                 onChange={(e) => handleChange(e, 0, "flightDestination")}
                             />
+                            {flightDetails.destination === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Destination is Mandatory</label>}
                         </div>
 
                         <div className="p-5 mb-5 basis-1/3">
@@ -77,6 +79,7 @@ const TourDetailsForm = ({ handleChange, flightDetails, accomodationDetailsData,
                                     <option value="Emirates">Emirates</option>
 
                                 </select>
+                                {flightDetails.airline === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Airline is Mandatory</label>}
 
                             </div>
                         </div>
@@ -92,6 +95,7 @@ const TourDetailsForm = ({ handleChange, flightDetails, accomodationDetailsData,
                                     value={flightDetails.depatureDateTime && dayjs(flightDetails.depatureDateTime, 'YYYY-MM-DD')}
                                     onChange={(e) => handleChange(e, 0, 'flightDepatureDateTime')} />
                             </div>
+                            {flightDetails.depatureDateTime === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Departure Date is Mandatory</label>}
                         </div>
                         <div className="p-3 mb-5 basis-1/3">
                             <label htmlFor="flightArrivalDateTime" className={`${font.className} mb-2 block text-sm font-medium pl-2`}>
@@ -102,6 +106,7 @@ const TourDetailsForm = ({ handleChange, flightDetails, accomodationDetailsData,
                                     value={flightDetails.arrivalDateTime && dayjs(flightDetails.arrivalDateTime, 'YYYY-MM-DD','en')}
                                     onChange={(e) => handleChange(e, 0, 'flightArrivalDateTime')} />
                             </div>
+                            {flightDetails.arrivalDateTime === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Arrival Date is Mandatory</label>}
                         </div>
                     </div>
                 </div>

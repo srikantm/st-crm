@@ -50,7 +50,7 @@ const AddPackageForm = ({ handleChange, values, departureCityDateData, updateCit
       });
   }, []);
 
-  setShowNextButton(values.packageName !== '' && values.packageCode !== ''
+  setShowNextButton(values.packageName !== '' && values.packageCode !== '' && values.packageImage !== ''
     && (values.packageTypeDomesticTours === true || values.packageTypeInternationalTours === true)
     && (values.packageThemeFamily === true || values.packageThemeHoneymoonSpecial === true ||
       values.packageThemeCustomizedHolidays === true || values.packageThemePopular === true || values.packageThemeSpecialValueFD === true)
@@ -306,7 +306,7 @@ const AddPackageForm = ({ handleChange, values, departureCityDateData, updateCit
 
           <div className="p-3 mb-5 basis-1/2">
             <label htmlFor="packageImage" className={`${font.className} mb-2 block text-sm font-medium`}>
-              Upload Package Image
+              Upload Package Image*
             </label>
             <input
               type="file"
@@ -314,12 +314,16 @@ const AddPackageForm = ({ handleChange, values, departureCityDateData, updateCit
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
               name="packageImage"
               onChange={(e) => {
-                const file = e.target.files[0];
+                const file = e.target.files && e.target.files[0];
                 if (file) {
-                  handleChange({ target: { name: 'packageImage', value: file } });
+                  handleChange({ target: { name: 'packageImage', value: file.name} });
+                  handleChange({ target: { name:"packageImageFile", value: file } });
+                } else {
+                  handleChange({ target: { name: 'packageImage', value: '' } });
                 }
               }}
             />
+            {values.packageImage === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Image is Mandatory</label>}
           </div>
         </div>
 

@@ -19,6 +19,8 @@ const UpdatePackage = ({ packageId }) => {
     const [formData, setFormData] = useState({
         packageName: "",
         packageCode: "",
+        packageImage: "",
+        packageImageFile: null,
         packageTypeDomesticTours: false,
         packageTypeInternationalTours: false,
         packageThemeFamily: false,
@@ -153,11 +155,11 @@ const UpdatePackage = ({ packageId }) => {
         //console.log("pacakageData", pacakageData);
 
         setFlightDetails({
-            source: pacakageData.tourDetails.flightDetails[0].departureCity,
-            destination: pacakageData.tourDetails.flightDetails[0].arrivalCity,
-            airline: pacakageData.tourDetails.flightDetails[0].flightName,
-            depatureDateTime: pacakageData.tourDetails.flightDetails[0].departureDate,
-            arrivalDateTime: pacakageData.tourDetails.flightDetails[0].arrivalDate
+            source: "",//pacakageData.tourDetails.flightDetails[0].departureCity,
+            destination: "",//pacakageData.tourDetails.flightDetails[0].arrivalCity,
+            airline: "",//pacakageData.tourDetails.flightDetails[0].flightName,
+            depatureDateTime: "",//pacakageData.tourDetails.flightDetails[0].departureDate,
+            arrivalDateTime: "",//pacakageData.tourDetails.flightDetails[0].arrivalDate
         });
 
         const editAccDetails = [];
@@ -235,6 +237,7 @@ const UpdatePackage = ({ packageId }) => {
             countryIds: countryIds,
             cityIds: itiCityIds,
             durationDays: pacakageData.durationDays,
+            durationNights: pacakageData.durationDays -1,
             itineraryStartDate: ""
         });
 
@@ -548,6 +551,7 @@ const UpdatePackage = ({ packageId }) => {
         if (type === "add") {
             const newArr = [...tourPricing,
             {
+                
                 hotelStarRating: "",
                 singleSharingPrice: "",
                 doubleSharingPrice: "",
@@ -689,7 +693,8 @@ const UpdatePackage = ({ packageId }) => {
                 return <TourPricing handleChange={handleChange}
                     tourPricing={tourPricing}
                     update={updateTourPriceComponent}
-                    setShowNextButton={setShowNextButton} />
+                    setShowNextButton={setShowNextButton}
+                    uploadedImage={formData.packageImage} />
             default:
                 <Typography variant="h4" align="center">
                     Multi Step Form
@@ -699,6 +704,42 @@ const UpdatePackage = ({ packageId }) => {
 
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState({});
+
+    // Central step validation to gate navigation
+    const isCurrentStepValid = () => {
+        const hasValue = (v) => v !== null && v !== undefined && String(v).trim() !== '';
+        if (activeStep === 0) {
+            const typeOk = formData.packageTypeDomesticTours || formData.packageTypeInternationalTours;
+            const themeOk = formData.packageThemeFamily || formData.packageThemeHoneymoonSpecial || formData.packageThemeCustomizedHolidays || formData.packageThemePopular || formData.packageThemeSpecialValueFD;
+            const includesOk = formData.packageIncludesMeals || formData.packageIncludesHotels || formData.packageIncludesSightSeeing || formData.packageIncludesTransfers;
+            const imageOk = hasValue(formData.packageImage);
+            const depOk = departureCityDateData.length > 0 && departureCityDateData.every((d) => hasValue(d.cityId) && d.cityId !== 0 && hasValue(d.departureDate));
+            return hasValue(formData.packageName) && hasValue(formData.packageCode) && typeOk && themeOk && includesOk && imageOk && depOk;
+        }
+        if (activeStep === 1) {
+            const flightOk = hasValue(flightDetails.source) && hasValue(flightDetails.destination) && hasValue(flightDetails.airline) && hasValue(flightDetails.depatureDateTime) && hasValue(flightDetails.arrivalDateTime);
+            const accOk = accomodationDetailsData.length > 0 && accomodationDetailsData.every((a) => hasValue(a.countryId) && hasValue(a.cityId) && hasValue(a.hotelName) && hasValue(a.checkInDate) && hasValue(a.checkOutDate));
+            const repOk = reportingAndDroppingData.length > 0 && reportingAndDroppingData.every((r) => hasValue(r.guestType) && hasValue(r.reportingPoint) && hasValue(r.droppingPoint));
+            return flightOk && accOk && repOk;
+        }
+        if (activeStep === 2) {
+            return hasValue(tourInformation.tourInclusion) && hasValue(tourInformation.tourExclusion) && hasValue(tourInformation.advancePreparation) && hasValue(tourInformation.tourRating) && hasValue(tourInformation.tourTotalReviews);
+        }
+        if (activeStep === 3) {
+            const itineraryOk = itineraryDetails.countryIds.length > 0 && itineraryDetails.cityIds.length > 0 && hasValue(itineraryDetails.durationDays);
+            const everyItineraryValid = itineraries.length > 0 && itineraries.every((it) => hasValue(it.itineraryTitle) && hasValue(it.description) && it.cityIds && it.cityIds.length > 0);
+            return itineraryOk && everyItineraryValid;
+        }
+        if (activeStep === 4) {
+            const pricingOk = tourPricing.length > 0 && tourPricing.every((p) => hasValue(p.hotelStarRating) && hasValue(p.singleSharingPrice) && hasValue(p.doubleSharingPrice) && hasValue(p.threeSharingPrice) && hasValue(p.childWithoutBedPrice) && hasValue(p.childWithBedPrice) && hasValue(p.infantPrice));
+            return pricingOk && hasValue(formData.packageImage);
+        }
+        return false;
+    };
+
+    React.useEffect(() => {
+        setShowNextButton(isCurrentStepValid());
+    }, [activeStep, formData, departureCityDateData, flightDetails, accomodationDetailsData, reportingAndDroppingData, tourInformation, itineraryDetails, itineraries, tourPricing]);
 
     const totalSteps = () => {
         return steps.length;
@@ -717,9 +758,9 @@ const UpdatePackage = ({ packageId }) => {
     };
 
     const handleNext = () => {
-        // if(showNextButton === false){
-        //     return;
-        // }
+        if(isCurrentStepValid() === false){
+            return;
+        }
         const newActiveStep =
             isLastStep() && !allStepsCompleted()
                 ?
@@ -730,13 +771,14 @@ const UpdatePackage = ({ packageId }) => {
 
     function populateFormatData() {
         let populateFormData = {
-            packages: [
-                {
+           
                     id:packageId,
                     packageName: formData.packageName,
                     packageCode: formData.packageCode,
-                    packageListImages: [],
-                    packageDetailImages: [],
+                    packageImageName: formData.packageImage,
+                    packageImageFile: formData.packageImageFile,
+                    packageListImages: formData.packageImage ? [formData.packageImage] : [],
+                    packageDetailImages: formData.packageImage ? [formData.packageImage] : [],
                     departureCityDatesMappings: populateDepCityDateMap(),
                     touringCities: itineraryDetails.cityIds,
                     tourIncludes: populateTourIncludes(),
@@ -750,8 +792,7 @@ const UpdatePackage = ({ packageId }) => {
                     itineraries: itineraries,
                     tourInformation: populateTourInformation(),
                     tourDetails: populateTourDetails()
-                }
-            ]
+            
         }
         return populateFormData;
     }
@@ -759,10 +800,14 @@ const UpdatePackage = ({ packageId }) => {
     const savePackage =  () => {
         const postData = populateFormatData();
         console.log("postData --- ",postData);
+        console.log("packageImageFile==="+formData.packageImageFile+"  packageid "+packageId);
         if (packageId == null) {
-            saveProduct(postData);
+             console.log("if part called");
+           saveProduct(postData);
+           
         }else{
-           updateProduct(postData);
+            console.log("else part called");
+           updateProduct(postData, formData.packageImageFile);
            
         }
 
@@ -1011,7 +1056,7 @@ const UpdatePackage = ({ packageId }) => {
                                 }
                                 <Box sx={{ flex: '1 1 auto' }} />
 
-                                {activeStep + 1 === steps.length ? (
+                            {activeStep + 1 === steps.length ? (
                                     <button onClick={savePackage}
                                         className="bg-green-200 border-green-500 text-green-600 rounded-md w-40 h-10 hover:bg-green-500 hover:text-white">
                                         Save Package
@@ -1019,7 +1064,9 @@ const UpdatePackage = ({ packageId }) => {
                                 ) : (
 
                                     <button onClick={handleNext}
-                                        className="bg-blue-200 border-blue-500 text-blue-600 rounded-md w-20 h-10 hover:bg-blue-500 hover:text-white">
+                                        disabled={!isCurrentStepValid()}
+                                        className="bg-blue-200 border-blue-500 text-blue-600 rounded-md w-20 h-10 hover:bg-blue-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                        title={!isCurrentStepValid() ? "Please fill up the mandatory fields" : ""}>
                                         Next
                                     </button>
                                 )}

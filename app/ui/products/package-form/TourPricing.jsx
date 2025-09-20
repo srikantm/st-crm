@@ -6,8 +6,18 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { font } from "../../fonts";
 
-const TourPricing = ({ handleChange, tourPricing, update }) => {
-
+const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, uploadedImage }) => {
+    const isValidRow = (row) => {
+        return row.hotelStarRating !== ''
+            && row.singleSharingPrice !== ''
+            && row.doubleSharingPrice !== ''
+            && row.threeSharingPrice !== ''
+            && row.childWithoutBedPrice !== ''
+            && row.childWithBedPrice !== ''
+            && row.infantPrice !== '';
+    };
+    const allValid = tourPricing.length > 0 && tourPricing.every(isValidRow) && uploadedImage !== '';
+    setShowNextButton(allValid);
     const theme = useTheme();
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -29,6 +39,24 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                     <label htmlFor="itineraryDetails" className={`${font.className} mb-2 block text-lg text-blue-500 font-light pl-2 justify-self-center`}>
                         Tour Pricing*
                     </label>
+                    {/* <div className="p-3 mb-5">
+                        <label className={`${font.className} mb-2 block text-sm font-medium`}>
+                            Selected Image
+                        </label>
+                        <div className="text-sm pb-2">
+                            {uploadedImage ? uploadedImage : 'No image selected'}
+                        </div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-2 text-sm outline-2 placeholder:text-gray-500"
+                            onChange={(e) => {
+                                const file = e.target.files && e.target.files[0];
+                                handleChange({ target: { name: 'packageImage', value: file ? file.name : '' } });
+                            }}
+                        />
+                        {uploadedImage === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Image is Mandatory</label>}
+                    </div> */}
                     {tourPricing.map((data, index) => {
                         return (
                             <>
@@ -56,8 +84,8 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                                                 <MenuItem value={"FOUR_STAR"} sx={{ fontSize: '12px' }}>FOUR STAR</MenuItem>
                                                 <MenuItem value={"THREE_STAR"} sx={{ fontSize: '12px' }}>THREE STAR</MenuItem>
 
-                                            </Select>
-                                            {data.hotelStarRating === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Hotel Star Rating is Mandatory </label>}
+                                </Select>
+                                {data.hotelStarRating === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Hotel Star Rating is Mandatory </label>}
 
                                         </div>
                                     </div>
@@ -75,9 +103,7 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                                             onChange={(e) => handleChange(e, index, "singleSharingPrice")}
                                             value={data.singleSharingPrice}
                                         />
-                                        {/* {data.singleSharingPrice === '' && <label htmlFor="packageName" className={`${font.className} mb-2 block text-xs text-red-500`}>
-                                      Single Sharing Price is Mandatory
-                                    </label>} */}
+                                        {data.singleSharingPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Single Sharing Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -92,9 +118,7 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                                             onChange={(e) => handleChange(e, index, "doubleSharingPrice")}
                                             value={data.doubleSharingPrice}
                                         />
-                                        {/* {data.singleSharingPrice === '' && <label htmlFor="packageName" className={`${font.className} mb-2 block text-xs text-red-500`}>
-                                      Single Sharing Price is Mandatory
-                                    </label>} */}
+                                        {data.doubleSharingPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Two Sharing Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -109,9 +133,7 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                                             onChange={(e) => handleChange(e, index, "threeSharingPrice")}
                                             value={data.threeSharingPrice}
                                         />
-                                        {/* {data.singleSharingPrice === '' && <label htmlFor="packageName" className={`${font.className} mb-2 block text-xs text-red-500`}>
-                                      Single Sharing Price is Mandatory
-                                    </label>} */}
+                                        {data.threeSharingPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Three Sharing Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -126,9 +148,7 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                                             onChange={(e) => handleChange(e, index, "childWithoutBedPrice")}
                                             value={data.childWithoutBedPrice}
                                         />
-                                        {/* {data.singleSharingPrice === '' && <label htmlFor="packageName" className={`${font.className} mb-2 block text-xs text-red-500`}>
-                                      Single Sharing Price is Mandatory
-                                    </label>} */}
+                                        {data.childWithoutBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Child (No bed) Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -143,9 +163,7 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                                             onChange={(e) => handleChange(e, index, "childWithBedPrice")}
                                             value={data.childWithBedPrice}
                                         />
-                                        {/* {data.singleSharingPrice === '' && <label htmlFor="packageName" className={`${font.className} mb-2 block text-xs text-red-500`}>
-                                      Single Sharing Price is Mandatory
-                                    </label>} */}
+                                        {data.childWithBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Child (Extra bed) Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -160,9 +178,7 @@ const TourPricing = ({ handleChange, tourPricing, update }) => {
                                             onChange={(e) => handleChange(e, index, "infantPrice")}
                                             value={data.infantPrice}
                                         />
-                                        {/* {data.singleSharingPrice === '' && <label htmlFor="packageName" className={`${font.className} mb-2 block text-xs text-red-500`}>
-                                      Single Sharing Price is Mandatory
-                                    </label>} */}
+                                        {data.infantPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Infant Price is Mandatory</label>}
                                     </div>
                                     <div className="pt-9 basis-1/8">
                                         {tourPricing.length === index + 1 ?

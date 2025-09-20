@@ -45,6 +45,7 @@ export function DeactivateProduct({ id }: { id: string }) {
   const handleDeactivate = async () => {
     const confirmed = window.confirm("Are you sure you want to deactivate this package?");
     if (confirmed) {
+      console.log("id::"+id);
       await deactivateProduct(id);
       router.refresh();
     }
