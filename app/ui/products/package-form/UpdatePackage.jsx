@@ -803,11 +803,11 @@ const UpdatePackage = ({ packageId }) => {
         console.log("packageImageFile==="+formData.packageImageFile+"  packageid "+packageId);
         if (packageId == null) {
              console.log("if part called");
-           saveProduct(postData);
+           saveProduct(postData, formData.packageImageFile);
            
         }else{
             console.log("else part called");
-           updateProduct(postData, formData.packageImageFile);
+           saveUpdateProduct(postData, formData.packageImageFile);
            
         }
 

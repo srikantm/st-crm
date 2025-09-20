@@ -460,46 +460,49 @@ export async function updateLead(id: string, formData: FormData) {
 
 
 
-export async function saveProduct(formData: { packages?: { packageName: string; packageCode: string; packageListImages: never[]; packageDetailImages: never[]; departureCityDatesMappings: {}; touringCities: never[]; tourIncludes: any[]; durationDays: string; durationNights: string; packageRating: string; totalPackageReviews: string; packageRates: any[]; packageTypes: any[]; packageThemes: any[]; itineraries: { itineraryTitle: string; cityIds: never[]; description: string; note: string; itineraryDate: string; itineraryAddons: { itineraryAddonType: string; description: string; }[]; }[]; tourInformation: any[]; tourDetails: { flightDetails: { departureCityId: number; arrivalCityId: number; departureDate: string; arrivalDate: string; flightName: string; }[]; accommodationDetails: any[]; reportingAndDroppings: { guestType: string; reportingPoint: string; droppingPoint: string; }[]; }; }[]; get?: any; }) {
+export async function saveProduct(formData: String, file:File) {
 
   console.log("formData", formData);
 
 
   const domain =  process.env.NEXT_PUBLIC_API_URL;
-  const url = `${domain}/v1/package/add`;
+  const url = `${domain}/v1/package/addPackage`;
 
-  const requestOptions = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
+  console.log("Request Body::::", JSON.stringify(formData));
+  console.log("File::::", file);
+
+  const formDatas = new FormData();
+  formDatas.append("packages", JSON.stringify(formData)); 
+  formDatas.append("packageFile", file); 
+
+  // Debugging
+  for (let pair of formDatas.entries()) {
+    console.log(pair[0] + ":", pair[1]);
+  }
+
+  const requestOptions: RequestInit = {
+    method: "POST",
+    body: formDatas, 
   };
 
-  await fetch(url, requestOptions)
-      .then(response => {
-          // Check if the request was successful
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          // Parse the JSON response
-          return response.json();
+  try {
+    const res = await fetch(url, requestOptions);
+    if (!res.ok) {
+      throw new Error("Network response was not ok");
+    }
 
-      })
-      .then(d => {
-          // Handle the data returned from the server
-          d.response
-      })
-      .catch(error => {
-          // Handle any errors that occurred during the fetch
-          console.error('There was a problem with the fetch operation:', error);
-      });
+    const data = await res.json();
+    console.log("Response:", data);
+
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+  }
   
   revalidatePath('/dashboard/products');
   redirect('/dashboard/products');
 }
 
-export async function updateProduct(formData: String,file: File) {
+export async function updateProduct(formData: String, file: File) {
   console.log("update called");
 
   const domain = process.env.NEXT_PUBLIC_API_URL;
