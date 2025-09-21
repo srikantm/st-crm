@@ -502,7 +502,7 @@ export async function saveProduct(formData: String, file:File) {
   redirect('/dashboard/products');
 }
 
-export async function updateProduct(formData: String, file: File) {
+export async function updateProduct(formData: String, file: File | null) {
   console.log("update called");
 
   const domain = process.env.NEXT_PUBLIC_API_URL;
@@ -513,7 +513,11 @@ export async function updateProduct(formData: String, file: File) {
 
   const formDatas = new FormData();
   formDatas.append("packages", JSON.stringify(formData)); 
-  formDatas.append("packageFile", file); 
+  
+  // Only append file if it exists
+  if (file) {
+    formDatas.append("packageFile", file);
+  }
 
   // Debugging
   for (let pair of formDatas.entries()) {

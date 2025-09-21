@@ -5,7 +5,12 @@ const nextConfig: NextConfig = {
     output:"standalone",
     devIndicators: {
         appIsrStatus: false,
-      },
+    },
+    experimental: {
+        serverActions: {
+            bodySizeLimit: '10mb',
+        },
+    },
 };
 
 export default nextConfig;

@@ -169,7 +169,7 @@ const AccomodationComponent = ({ handleChange, data, dataSize, index, update, se
                         value={data.checkInDate && dayjs(data.checkInDate, 'YYYY-MM-DD','en')}
                         onChange={(e) => handleChange(e, index, 'accomodationCheckInDate')} />
                 </div>
-                {(!data.checkInDate || data.checkInDate === '') && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Check-in Date is Mandatory</label>}
+                {(!data.checkInDate || data.checkInDate === '') && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}></label>}
             </div>
             <div className="p-3 basis-1/3">
                 <label htmlFor="accomodationCheckOutDate" className={`${font.className} mb-2 block text-sm pl-2`}>
@@ -180,7 +180,7 @@ const AccomodationComponent = ({ handleChange, data, dataSize, index, update, se
                         value={data.checkOutDate && dayjs(data.checkOutDate, 'YYYY-MM-DD','en')}
                         onChange={(e) => handleChange(e, index, 'accomodationCheckOutDate')} />
                 </div>
-                {(!data.checkOutDate || data.checkOutDate === '') && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}>Check-out Date is Mandatory</label>}
+                {(!data.checkOutDate || data.checkOutDate === '') && <label htmlFor="error" className={`${font.className} mb-2 block text-sm text-red-500`}></label>}
             </div>
             <div className="p-2 basis-1/3 pl-20 pt-12">
                 {dataSize === index + 1 ?

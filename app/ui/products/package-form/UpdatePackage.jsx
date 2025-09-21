@@ -713,14 +713,23 @@ const UpdatePackage = ({ packageId }) => {
             const themeOk = formData.packageThemeFamily || formData.packageThemeHoneymoonSpecial || formData.packageThemeCustomizedHolidays || formData.packageThemePopular || formData.packageThemeSpecialValueFD;
             const includesOk = formData.packageIncludesMeals || formData.packageIncludesHotels || formData.packageIncludesSightSeeing || formData.packageIncludesTransfers;
             const imageOk = hasValue(formData.packageImage);
-            const depOk = departureCityDateData.length > 0 && departureCityDateData.every((d) => hasValue(d.cityId) && d.cityId !== 0 && hasValue(d.departureDate));
+            const depOk = departureCityDateData.length > 0 && departureCityDateData.every((d) => hasValue(d.cityId) && d.cityId !== 0);
             return hasValue(formData.packageName) && hasValue(formData.packageCode) && typeOk && themeOk && includesOk && imageOk && depOk;
         }
         if (activeStep === 1) {
-            const flightOk = hasValue(flightDetails.source) && hasValue(flightDetails.destination) && hasValue(flightDetails.airline) && hasValue(flightDetails.depatureDateTime) && hasValue(flightDetails.arrivalDateTime);
-            const accOk = accomodationDetailsData.length > 0 && accomodationDetailsData.every((a) => hasValue(a.countryId) && hasValue(a.cityId) && hasValue(a.hotelName) && hasValue(a.checkInDate) && hasValue(a.checkOutDate));
-            const repOk = reportingAndDroppingData.length > 0 && reportingAndDroppingData.every((r) => hasValue(r.guestType) && hasValue(r.reportingPoint) && hasValue(r.droppingPoint));
-            return flightOk && accOk && repOk;
+            // Make all flight details optional
+            const flightOk = true;
+            
+            // Make check-in and check-out dates optional in accommodation details
+            const accOk = accomodationDetailsData.length > 0 && accomodationDetailsData.every((a) => 
+                hasValue(a.countryId) && hasValue(a.cityId) && hasValue(a.hotelName)
+            );
+            
+            const repOk = reportingAndDroppingData.length > 0 && reportingAndDroppingData.every((r) => 
+                hasValue(r.guestType) && hasValue(r.reportingPoint) && hasValue(r.droppingPoint)
+            );
+            
+            return accOk && repOk;
         }
         if (activeStep === 2) {
             return hasValue(tourInformation.tourInclusion) && hasValue(tourInformation.tourExclusion) && hasValue(tourInformation.advancePreparation) && hasValue(tourInformation.tourRating) && hasValue(tourInformation.tourTotalReviews);
@@ -731,7 +740,12 @@ const UpdatePackage = ({ packageId }) => {
             return itineraryOk && everyItineraryValid;
         }
         if (activeStep === 4) {
-            const pricingOk = tourPricing.length > 0 && tourPricing.every((p) => hasValue(p.hotelStarRating) && hasValue(p.singleSharingPrice) && hasValue(p.doubleSharingPrice) && hasValue(p.threeSharingPrice) && hasValue(p.childWithoutBedPrice) && hasValue(p.childWithBedPrice) && hasValue(p.infantPrice));
+            const pricingOk = tourPricing.length > 0 && tourPricing.every((p) => 
+                hasValue(p.hotelStarRating) && 
+                // Make at least one of the sharing prices mandatory, not all
+                (hasValue(p.singleSharingPrice) || hasValue(p.doubleSharingPrice) || hasValue(p.threeSharingPrice)) &&
+                hasValue(p.childWithoutBedPrice) && hasValue(p.childWithBedPrice) && hasValue(p.infantPrice)
+            );
             return pricingOk && hasValue(formData.packageImage);
         }
         return false;
@@ -807,7 +821,7 @@ const UpdatePackage = ({ packageId }) => {
            
         }else{
             console.log("else part called");
-           saveUpdateProduct(postData, formData.packageImageFile);
+           updateProduct(postData, formData.packageImageFile);
            
         }
 

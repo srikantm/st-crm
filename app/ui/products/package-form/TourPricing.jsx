@@ -148,7 +148,7 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "childWithoutBedPrice")}
                                             value={data.childWithoutBedPrice}
                                         />
-                                        {data.childWithoutBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Child (No bed) Price is Mandatory</label>}
+                                        {data.childWithoutBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}></label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -163,7 +163,7 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "childWithBedPrice")}
                                             value={data.childWithBedPrice}
                                         />
-                                        {data.childWithBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Child (Extra bed) Price is Mandatory</label>}
+                                        {data.childWithBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}></label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -178,7 +178,7 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "infantPrice")}
                                             value={data.infantPrice}
                                         />
-                                        {data.infantPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Infant Price is Mandatory</label>}
+                                        {data.infantPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}></label>}
                                     </div>
                                     <div className="pt-9 basis-1/8">
                                         {tourPricing.length === index + 1 ?
