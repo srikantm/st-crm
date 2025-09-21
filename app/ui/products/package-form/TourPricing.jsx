@@ -7,16 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { font } from "../../fonts";
 
 const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, uploadedImage }) => {
-    const isValidRow = (row) => {
-        return row.hotelStarRating !== ''
-            && row.singleSharingPrice !== ''
-            && row.doubleSharingPrice !== ''
-            && row.threeSharingPrice !== ''
-            && row.childWithoutBedPrice !== ''
-            && row.childWithBedPrice !== ''
-            && row.infantPrice !== '';
-    };
-    const allValid = tourPricing.length > 0 && tourPricing.every(isValidRow) && uploadedImage !== '';
+    const allValid = uploadedImage !== '';
     setShowNextButton(allValid);
     const theme = useTheme();
     const ITEM_HEIGHT = 48;
@@ -85,7 +76,6 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                                 <MenuItem value={"THREE_STAR"} sx={{ fontSize: '12px' }}>THREE STAR</MenuItem>
 
                                 </Select>
-                                {data.hotelStarRating === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Hotel Star Rating is Mandatory </label>}
 
                                         </div>
                                     </div>
@@ -103,7 +93,6 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "singleSharingPrice")}
                                             value={data.singleSharingPrice}
                                         />
-                                        {data.singleSharingPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Single Sharing Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -118,7 +107,6 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "doubleSharingPrice")}
                                             value={data.doubleSharingPrice}
                                         />
-                                        {data.doubleSharingPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Two Sharing Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -133,7 +121,6 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "threeSharingPrice")}
                                             value={data.threeSharingPrice}
                                         />
-                                        {data.threeSharingPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Three Sharing Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -148,7 +135,6 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "childWithoutBedPrice")}
                                             value={data.childWithoutBedPrice}
                                         />
-                                        {data.childWithoutBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Child (No bed) Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -163,7 +149,6 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "childWithBedPrice")}
                                             value={data.childWithBedPrice}
                                         />
-                                        {data.childWithBedPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Child (Extra bed) Price is Mandatory</label>}
                                     </div>
 
                                     <div className="p-3 mb-5 basis-1/8">
@@ -178,7 +163,6 @@ const TourPricing = ({ handleChange, tourPricing, update, setShowNextButton, upl
                                             onChange={(e) => handleChange(e, index, "infantPrice")}
                                             value={data.infantPrice}
                                         />
-                                        {data.infantPrice === '' && <label htmlFor="error" className={`${font.className} mb-2 block text-xs text-red-500`}>Infant Price is Mandatory</label>}
                                     </div>
                                     <div className="pt-9 basis-1/8">
                                         {tourPricing.length === index + 1 ?

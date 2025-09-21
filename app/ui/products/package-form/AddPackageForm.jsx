@@ -50,7 +50,7 @@ const AddPackageForm = ({ handleChange, values, departureCityDateData, updateCit
       });
   }, []);
 
-  setShowNextButton(values.packageName !== '' && values.packageCode !== '' && values.packageImage !== ''
+  setShowNextButton(values.packageName !== '' && values.packageImage !== ''
     && (values.packageTypeDomesticTours === true || values.packageTypeInternationalTours === true)
     && (values.packageThemeFamily === true || values.packageThemeHoneymoonSpecial === true ||
       values.packageThemeCustomizedHolidays === true || values.packageThemePopular === true || values.packageThemeSpecialValueFD === true)
@@ -92,9 +92,6 @@ const AddPackageForm = ({ handleChange, values, departureCityDateData, updateCit
               value={values.packageCode}
               onChange={handleChange}
             />
-            {values.packageCode === '' && <label htmlFor="packageName" className={`${font.className} mb-2 block text-sm text-red-500`}>
-              Package Code is Mandatory
-            </label>}
           </div>
         </div>
 

@@ -125,6 +125,7 @@ const UpdatePackage = ({ packageId }) => {
             ...prevData,
             packageName: pacakageData.packageName,
             packageCode: pacakageData.packageCode,
+            packageImage: pacakageData.packageImage != null?pacakageData.packageImage :"",
             packageTypeDomesticTours: pacakageData.packageTypes.includes('DOMESTIC_TOURS'),
             packageTypeInternationalTours: pacakageData.packageTypes.includes("INTERNATIONAL_TOURS"),
             packageThemeFamily: pacakageData.packageThemes.includes("FAMILY"),
@@ -713,14 +714,13 @@ const UpdatePackage = ({ packageId }) => {
             const themeOk = formData.packageThemeFamily || formData.packageThemeHoneymoonSpecial || formData.packageThemeCustomizedHolidays || formData.packageThemePopular || formData.packageThemeSpecialValueFD;
             const includesOk = formData.packageIncludesMeals || formData.packageIncludesHotels || formData.packageIncludesSightSeeing || formData.packageIncludesTransfers;
             const imageOk = hasValue(formData.packageImage);
-            const depOk = departureCityDateData.length > 0 && departureCityDateData.every((d) => hasValue(d.cityId) && d.cityId !== 0 && hasValue(d.departureDate));
-            return hasValue(formData.packageName) && hasValue(formData.packageCode) && typeOk && themeOk && includesOk && imageOk && depOk;
+            const depOk = departureCityDateData.length > 0 && departureCityDateData.every((d) => hasValue(d.cityId) && d.cityId !== 0);
+            return hasValue(formData.packageName) && typeOk && themeOk && includesOk && imageOk && depOk;
         }
         if (activeStep === 1) {
-            const flightOk = hasValue(flightDetails.source) && hasValue(flightDetails.destination) && hasValue(flightDetails.airline) && hasValue(flightDetails.depatureDateTime) && hasValue(flightDetails.arrivalDateTime);
-            const accOk = accomodationDetailsData.length > 0 && accomodationDetailsData.every((a) => hasValue(a.countryId) && hasValue(a.cityId) && hasValue(a.hotelName) && hasValue(a.checkInDate) && hasValue(a.checkOutDate));
+            const accOk = accomodationDetailsData.length > 0 && accomodationDetailsData.every((a) => hasValue(a.countryId) && hasValue(a.cityId) && hasValue(a.hotelName));
             const repOk = reportingAndDroppingData.length > 0 && reportingAndDroppingData.every((r) => hasValue(r.guestType) && hasValue(r.reportingPoint) && hasValue(r.droppingPoint));
-            return flightOk && accOk && repOk;
+            return accOk && repOk;
         }
         if (activeStep === 2) {
             return hasValue(tourInformation.tourInclusion) && hasValue(tourInformation.tourExclusion) && hasValue(tourInformation.advancePreparation) && hasValue(tourInformation.tourRating) && hasValue(tourInformation.tourTotalReviews);
@@ -731,8 +731,7 @@ const UpdatePackage = ({ packageId }) => {
             return itineraryOk && everyItineraryValid;
         }
         if (activeStep === 4) {
-            const pricingOk = tourPricing.length > 0 && tourPricing.every((p) => hasValue(p.hotelStarRating) && hasValue(p.singleSharingPrice) && hasValue(p.doubleSharingPrice) && hasValue(p.threeSharingPrice) && hasValue(p.childWithoutBedPrice) && hasValue(p.childWithBedPrice) && hasValue(p.infantPrice));
-            return pricingOk && hasValue(formData.packageImage);
+            return hasValue(formData.packageImage);
         }
         return false;
     };
