@@ -1,4 +1,4 @@
-import { DeactivateProduct, UpdateProduct, ViewProduct } from '@/app/ui/products/buttons';
+import { DeactivateProduct, UpdateProduct, ViewProduct, UploadProductImage } from '@/app/ui/products/buttons';
 import { fetchFilteredProducts } from '@/app/lib/data';
 import { font } from '../fonts';
 import PackageStatus from './status';
@@ -100,6 +100,7 @@ export default async function ProductsTable({
                     <div className="flex justify-center gap-3">
                       <ViewProduct id={product.package_id}/>
                       <UpdateProduct id={product.package_id} />
+                      <UploadProductImage id={product.package_id} />
                       <DeactivateProduct id={product.package_id} />
                     </div>
                   </td>

@@ -2,6 +2,47 @@
 
 import { z } from 'zod';
 import { insertQuery, query } from './mysql';
+
+export async function uploadProductImage(formData: FormData) {
+  const file = formData.get('file') as File;
+  const productId = formData.get('productId') as string;
+  
+  if (!file) {
+    throw new Error('No file provided');
+  }
+  
+  if (!productId) {
+    throw new Error('No product ID provided');
+  }
+  
+  // Check file type
+  const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (!validTypes.includes(file.type)) {
+    throw new Error('Invalid file type. Only .jpg, .jpeg, and .png files are allowed.');
+  }
+  
+  const domain = process.env.NEXT_PUBLIC_API_URL;
+  const url = `${domain}/v1/package/uploadImage/${productId}`;
+  
+  const requestOptions: RequestInit = {
+    method: 'POST',
+    body: formData,
+  };
+  
+  try {
+    const res = await fetch(url, requestOptions);
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const data = await res.json();
+    console.log('Response:', data);
+    return data;
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+    throw error;
+  }
+}
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CreateInvoiceForm, CreatePaymentField, CreateQuoteForm } from './definitions';

@@ -6,7 +6,7 @@ import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchProductsPageCount } from '@/app/lib/data';
 import { Metadata } from 'next';
-import { CreateProduct } from '@/app/ui/products/buttons';
+import { CreateProduct, UploadProductImage } from '@/app/ui/products/buttons';
 
 export const metadata: Metadata = {
     title: 'Products',
@@ -29,7 +29,10 @@ export default async function Page(props: {
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-2 md:mb-2">
                 <Search placeholder="Search products..." />
-                <CreateProduct />
+                <div className="flex gap-2">
+                    <UploadProductImage />
+                    <CreateProduct />
+                </div>
             </div>
             <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
                 <Table query={query} currentPage={currentPage} />
