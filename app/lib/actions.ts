@@ -43,6 +43,129 @@ export async function uploadProductImage(formData: FormData) {
     throw error;
   }
 }
+
+
+export async function uploadProductImageList(files: File[]) {
+  if (!files || files.length === 0) {
+    throw new Error('No files provided');
+  }
+
+  // Validate file types
+  const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  for (const file of files) {
+    if (!validTypes.includes(file.type)) {
+      throw new Error(`Invalid file type: ${file.name}. Only JPG and PNG allowed.`);
+    }
+  }
+
+  // API endpoint
+  const domain = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  const url = `${domain}/v1/package/uploadIMageList`;
+
+  // Prepare form data
+  const formData = new FormData();
+  files.forEach((file) => formData.append('files', file)); // multiple files under 'files' key
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!res.ok) {
+      throw new Error(`Upload failed: ${res.status} ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    console.log('Upload success:', data);
+    return data;
+  } catch (error) {
+    console.error('Error uploading image list:', error);
+    throw error;
+  }
+}
+
+// src/lib/fetchActiveMappingImages.ts
+
+export interface ActiveImage {
+  id: number;
+  packageImageName: string;
+  status: string;
+  mappedPackageName: string | null;
+  mapped: boolean;
+}
+
+export interface ActiveMappingImagesResponse {
+  status: {
+    code: number;
+    message: string;
+  };
+  response: {
+    response: ActiveImage[];
+  };
+}
+
+export async function fetchActiveMappingImages(): Promise<ActiveImage[]> {
+  const domain = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  const url = `${domain}/v1/package/activeMappingImages`;
+
+  try {
+    const res = await fetch(url, {
+      method: 'GET',
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch active mapping images: ${res.statusText}`);
+    }
+
+    const data: ActiveMappingImagesResponse = await res.json();
+
+    // Defensive check in case of unexpected structure
+    if (!data.response || !data.response.response) {
+      throw new Error('Invalid response structure from API');
+    }
+
+    console.log('Fetched active mapping images:', data.response.response);
+    return data.response.response;
+  } catch (error) {
+    console.error('Error fetching active mapping images:', error);
+    throw error;
+  }
+}
+
+
+// src/lib/mapImageToPackage.ts
+
+export interface MapImageResponse {
+  status: {
+    code: number;
+    message: string;
+  };
+}
+
+export async function mapImageToPackage(packageId: string | number, imageId: number): Promise<MapImageResponse> {
+  const domain = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  const url = `${domain}/v1/package/mapImagesToProduct?packageId=${packageId}&imageId=${imageId}`;
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+    });
+
+    if (!res.ok) {
+      throw new Error(`Mapping failed: ${res.status} ${res.statusText}`);
+    }
+
+    const data: MapImageResponse = await res.json();
+    console.log('Mapping success:', data);
+    return data;
+  } catch (error) {
+    console.error('Error mapping image to package:', error);
+    throw error;
+  }
+}
+
+
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CreateInvoiceForm, CreatePaymentField, CreateQuoteForm } from './definitions';
